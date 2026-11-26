@@ -99,7 +99,35 @@ Aplikasi membaca satu node utama `/monitoring` dan menulis perintah kontrol ke `
 
 ---
 
-## 5. Cara Menjalankan & Pengujian
+## 5. Setup Firebase (Firebase CLI & FlutterFire CLI)
+
+Jika ingin menghubungkan proyek Flutter ke proyek Firebase milik sendiri (atau melakukan konfigurasi ulang `lib/firebase_options.dart`), jalankan langkah berikut:
+
+1. **Install Firebase CLI** *(jika belum terpasang, membutuhkan Node.js)*:
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Login ke akun Google/Firebase**:
+   ```bash
+   firebase login
+   ```
+
+3. **Aktifkan FlutterFire CLI secara global**:
+   ```bash
+   dart pub global activate flutterfire_cli
+   ```
+   > **Catatan (Windows):** Jika perintah `flutterfire` belum dikenali di terminal, pastikan direktori `%LOCALAPPDATA%\Pub\Cache\bin` sudah ditambahkan ke Environment Variable `PATH`, lalu buka ulang terminal.
+
+4. **Hubungkan proyek Flutter ke Firebase** *(jalankan di dalam folder `proyek2/smartgarden`)*:
+   ```bash
+   flutterfire configure
+   ```
+   Pilih proyek Firebase yang diinginkan serta platform target (misalnya **Android**, **Web**, dan **Windows**). Perintah ini otomatis membuat/memperbarui file `lib/firebase_options.dart` dan file konfigurasi platform seperti `android/app/google-services.json`.
+
+---
+
+## 6. Cara Menjalankan & Pengujian
 
 Jalankan perintah berikut di dalam folder `proyek2/smartgarden`:
 
