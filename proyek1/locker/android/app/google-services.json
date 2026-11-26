@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "889897509809",
+    "firebase_url": "https://locker-b9df4-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "locker-b9df4",
+    "storage_bucket": "locker-b9df4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889897509809:android:2c3e5ca6845afcd7f45390",
+        "android_client_info": {
+          "package_name": "com.example.locker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmv2_0tmqmBoSDgvwSFru5Ah_L4b7SJq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
