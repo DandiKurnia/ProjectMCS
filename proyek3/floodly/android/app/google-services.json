@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "242444682863",
+    "firebase_url": "https://floodly-27cd8-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "floodly-27cd8",
+    "storage_bucket": "floodly-27cd8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242444682863:android:86992f7d4fb52cf75d2f9a",
+        "android_client_info": {
+          "package_name": "com.example.floodly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABOrhr7BbzQpW8-ea1u6VaDKQb8OCEgH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
