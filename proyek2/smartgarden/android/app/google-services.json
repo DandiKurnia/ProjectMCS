@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "306770455383",
+    "firebase_url": "https://firepump-6455a-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "firepump-6455a",
+    "storage_bucket": "firepump-6455a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306770455383:android:d2cef5160507858caa2c12",
+        "android_client_info": {
+          "package_name": "com.example.smartgarden"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0F7-LK5LyP_kJuAXVG2dhX8qmrHbzVRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
