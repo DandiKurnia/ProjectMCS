@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:smartgarden/models/monitoring_data.dart';
 
+/// Kartu utama untuk menampilkan persentase kelembapan tanah,
+/// badge status (`DRY` / `WET`), dan indikator progress bar.
 class MoistureCard extends StatelessWidget {
   const MoistureCard({super.key, required this.data});
 
+  /// Data monitoring terbaru dari Firebase.
   final MonitoringData data;
 
   @override
   Widget build(BuildContext context) {
+    // Gunakan warna oranye/terakota saat tanah kering, dan hijau saat tanah basah.
     final accent = data.isDry
         ? const Color(0xFFC25E28)
         : const Color(0xFF2E7D52);
@@ -28,6 +32,7 @@ class MoistureCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header kartu: judul dan badge kondisi tanah.
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -60,6 +65,7 @@ class MoistureCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
+          // Angka utama persentase kelembapan tanah.
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
@@ -85,6 +91,7 @@ class MoistureCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
+          // Visualisasi bar kelembapan (rentang 0.0 - 1.0).
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
             child: LinearProgressIndicator(

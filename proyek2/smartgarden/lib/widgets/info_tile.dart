@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Kartu informasi ringkas (reusable) untuk menampilkan satu metrik,
+/// seperti status pompa/relay atau nilai mentah ADC sensor.
 class InfoTile extends StatelessWidget {
   const InfoTile({
     super.key,
@@ -10,10 +12,19 @@ class InfoTile extends StatelessWidget {
     this.accentColor = const Color(0xFF2E7D52),
   });
 
+  /// Ikon representasi metrik di bagian atas kartu.
   final IconData icon;
+
+  /// Judul kecil metrik (misal: `Status Pompa / Relay`).
   final String label;
+
+  /// Nilai utama yang ditonjolkan (misal: `ON`, `OFF`, atau angka raw ADC).
   final String value;
+
+  /// Keterangan tambahan singkat di bawah nilai utama.
   final String subtitle;
+
+  /// Warna aksen untuk ikon dan teks nilai utama.
   final Color accentColor;
 
   @override
@@ -28,6 +39,7 @@ class InfoTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Wadah ikon dengan latar belakang transparan sesuai warna aksen.
           Container(
             width: 36,
             height: 36,

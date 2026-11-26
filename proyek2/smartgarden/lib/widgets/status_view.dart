@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Widget tampilan status pengganti saat dashboard belum memiliki data,
+/// sedang memuat koneksi Firebase, atau mengalami error.
 class StatusView extends StatelessWidget {
   const StatusView({
     super.key,
@@ -10,10 +12,19 @@ class StatusView extends StatelessWidget {
     this.onRetry,
   });
 
+  /// Judul singkat kondisi saat ini.
   final String title;
+
+  /// Penjelasan detail atau pesan error.
   final String message;
+
+  /// Ikon yang ditampilkan ketika [isLoading] bernilai `false`.
   final IconData? icon;
+
+  /// Jika `true`, menampilkan `CircularProgressIndicator` alih-alih ikon.
   final bool isLoading;
+
+  /// Opsional: aksi tombol "Coba Lagi" untuk menghubungkan ulang ke Firebase.
   final VoidCallback? onRetry;
 
   @override
@@ -27,6 +38,7 @@ class StatusView extends StatelessWidget {
       ),
       child: Column(
         children: [
+          // Tampilkan spinner saat loading, atau ikon statis saat error/kosong.
           if (isLoading)
             const SizedBox(
               width: 32,
@@ -51,6 +63,7 @@ class StatusView extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 13, color: Color(0xFF5F7066)),
           ),
+          // Tampilkan tombol muat ulang hanya jika callback onRetry disediakan.
           if (onRetry != null) ...[
             const SizedBox(height: 18),
             FilledButton.tonalIcon(

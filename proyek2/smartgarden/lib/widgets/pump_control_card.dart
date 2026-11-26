@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smartgarden/models/monitoring_data.dart';
 
+/// Kartu kontrol pompa yang memungkinkan pengguna memilih mode
+/// **Otomatis** atau **Manual**, serta menyalakan/mematikan pompa saat mode Manual.
 class PumpControlCard extends StatelessWidget {
   const PumpControlCard({
     super.key,
@@ -10,20 +12,31 @@ class PumpControlCard extends StatelessWidget {
     this.isBusy = false,
   });
 
+  /// Data monitoring dan status kontrol terbaru dari Firebase.
   final MonitoringData data;
+
+  /// Callback saat pengguna memilih mode `PumpMode.auto` atau `PumpMode.manual`.
   final ValueChanged<PumpMode> onModeChanged;
+
+  /// Callback saat pengguna mengubah sakelar pompa manual (`true` = ON, `false` = OFF).
   final ValueChanged<bool> onManualPumpChanged;
+
+  /// Jika `true`, tombol dan sakelar dinonaktifkan sementara selama request Firebase berjalan.
   final bool isBusy;
 
   @override
   Widget build(BuildContext context) {
     final isManual = data.isManualMode;
+
+    // Warna badge dibedakan: biru-teal untuk Manual dan hijau untuk Otomatis.
     final badgeColor = isManual
         ? const Color(0xFF236B7E)
         : const Color(0xFF2E7D52);
     final badgeBg = isManual
         ? const Color(0xFFE8F3F6)
         : const Color(0xFFEAF6EE);
+
+    // Bernilai true ketika perintah manual di Firebase belum sama dengan status relay fisik ESP32.
     final isSyncingManual = isManual && (data.manualPumpOn != data.isRelayOn);
 
     return Container(
@@ -36,6 +49,7 @@ class PumpControlCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Header kartu: judul dan badge mode aktif.
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -78,6 +92,7 @@ class PumpControlCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
+          // Pemilih mode kerja pompa: Otomatis vs Manual.
           SegmentedButton<PumpMode>(
             segments: const [
               ButtonSegment<PumpMode>(
@@ -102,6 +117,7 @@ class PumpControlCard extends StatelessWidget {
                   },
           ),
           const SizedBox(height: 14),
+          // Konten bawah menyesuaikan mode aktif: sakelar untuk Manual, info untuk Otomatis.
           if (isManual)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -164,6 +180,7 @@ class PumpControlCard extends StatelessWidget {
                       ],
                     ),
                   ),
+                  // Sakelar ON/OFF untuk mengontrol pompa secara manual.
                   Switch(
                     value: data.manualPumpOn,
                     onChanged: isBusy ? null : onManualPumpChanged,

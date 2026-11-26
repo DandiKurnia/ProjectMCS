@@ -7,12 +7,19 @@ import 'package:smartgarden/widgets/moisture_card.dart';
 import 'package:smartgarden/widgets/pump_control_card.dart';
 import 'package:smartgarden/widgets/status_view.dart';
 
+/// Signature callback untuk mengubah mode pompa (memudahkan dependency injection saat testing).
 typedef PumpModeUpdater = Future<void> Function(
   PumpMode mode, {
   bool? manualPumpOn,
 });
+
+/// Signature callback untuk menyalakan/mematikan pompa saat mode manual.
 typedef ManualPumpUpdater = Future<void> Function(bool isOn);
 
+/// Halaman utama dashboard Smart Garden.
+///
+/// Mendengarkan perubahan data secara real-time dari `/monitoring` di Firebase
+/// serta menyediakan kontrol mode pompa (Otomatis / Manual).
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
@@ -21,8 +28,13 @@ class HomePage extends StatefulWidget {
     this.onUpdateManualPump,
   });
 
+  /// Opsional: stream custom untuk keperluan pengujian (widget test).
   final Stream<DatabaseEvent>? monitoringStream;
+
+  /// Opsional: handler custom pengganti [setPumpMode] untuk pengujian.
   final PumpModeUpdater? onUpdatePumpMode;
+
+  /// Opsional: handler custom pengganti [setManualPump] untuk pengujian.
   final ManualPumpUpdater? onUpdateManualPump;
 
   @override
@@ -30,7 +42,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  /// Stream aktif yang terhubung ke `/monitoring` di Firebase RTDB.
   late Stream<DatabaseEvent> _stream;
+
+  /// Menandakan proses pengiriman perintah kontrol ke Firebase sedang berlangsung.
   bool _isUpdatingControl = false;
 
   @override
@@ -39,16 +54,20 @@ class _HomePageState extends State<HomePage> {
     _stream = widget.monitoringStream ?? monitoringRef.onValue;
   }
 
+  /// Menghubungkan ulang stream database saat pengguna menekan tombol "Coba Lagi".
   void _reconnect() {
     setState(() {
       _stream = widget.monitoringStream ?? monitoringRef.onValue;
     });
   }
 
+  /// Menangani perpindahan mode Otomatis <-> Manual.
   Future<void> _handleModeChanged(MonitoringData data, PumpMode mode) async {
     setState(() => _isUpdatingControl = true);
     try {
       final updater = widget.onUpdatePumpMode ?? setPumpMode;
+      // Saat berpindah ke Manual, samakan perintah awal pompa dengan status relay saat ini
+      // agar pompa tidak langsung berubah sebelum pengguna menggeser sakelar.
       await updater(
         mode,
         manualPumpOn: mode == PumpMode.manual ? data.isRelayOn : null,
@@ -65,6 +84,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  /// Menangani perubahan sakelar pompa ON/OFF saat berada di mode Manual.
   Future<void> _handleManualPumpChanged(bool isOn) async {
     setState(() => _isUpdatingControl = true);
     try {
@@ -104,12 +124,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SafeArea(
+        // StreamBuilder otomatis membangun ulang UI setiap kali data di Firebase berubah.
         child: StreamBuilder<DatabaseEvent>(
           stream: _stream,
           builder: (context, snapshot) {
             return SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Center(
+                // Batasi lebar maksimum agar tetap rapi pada layar tablet/desktop/web.
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 440),
                   child: _buildBody(snapshot),
@@ -122,7 +144,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Menentukan tampilan body berdasarkan status koneksi dan kelengkapan data snapshot.
   Widget _buildBody(AsyncSnapshot<DatabaseEvent> snapshot) {
+    // 1. Tampilkan pesan error jika gagal terhubung atau Rules RTDB menolak akses.
     if (snapshot.hasError) {
       return StatusView(
         icon: Icons.cloud_off_rounded,
@@ -132,6 +156,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    // 2. Tampilkan indikator loading saat menunggu data pertama dari Firebase.
     if (snapshot.connectionState == ConnectionState.waiting) {
       return const StatusView(
         isLoading: true,
@@ -140,6 +165,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    // 3. Parse payload snapshot; tampilkan state kosong jika ESP32 belum mengirim data.
     final data = MonitoringData.fromSnapshot(snapshot.data?.snapshot.value);
     if (data == null) {
       return StatusView(
@@ -150,6 +176,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    // 4. Tampilkan kartu monitoring utama, kontrol pompa, dan ringkasan metrik.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
